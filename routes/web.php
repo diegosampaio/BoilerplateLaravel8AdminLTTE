@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\UsuariosController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +22,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'admin'], function() {
+
+
+    Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios');
+    Route::post('/usuarios', [UsuariosController::class, 'store'])->name('usuarios.store');
+    Route::get('/usuarios/{id}/show', [UsuariosController::class, 'show'])->name('usuarios.show');
+    Route::post('/usuarios/{id}/show', [UsuariosController::class, 'update'])->name('usuarios.update');
+    Route::post('/usuarios/delete', [UsuariosController::class, 'delete'])->name('usuarios.delete');
+
+});
